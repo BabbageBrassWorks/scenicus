@@ -36,8 +36,6 @@ var
   Console1: TWindowHandle;
   AudioThread: TAudioThread;
   VideoThread: TVideoThread;
-  //DefFrameBuff : PFrameBufferDevice;
-  //Properties : TWindowProperties;
   title:string;
 
 
