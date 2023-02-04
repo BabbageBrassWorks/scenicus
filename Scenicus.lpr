@@ -6,6 +6,7 @@ program Scenicus;
 { Gavin McIntosh 2023 }
 
 uses
+  ProgramInit,
   {$IFDEF RPI}
   RaspberryPi,
   {$ENDIF}
@@ -29,8 +30,7 @@ uses
   Classes,
   Player,
   dispmanx,
-  Ultibo
-  { Add additional units here };
+  Ultibo;
 
 var
   Console1: TWindowHandle;
