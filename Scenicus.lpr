@@ -9,13 +9,23 @@ program Scenicus;
 {  To compile your program select Run, Compile (or Run, Build) from the menu.  }
 
 uses
+  {$IFDEF RPI}
   RaspberryPi,
+  {$ENDIF}
+  {$IFDEF RPI2}
+  RaspberryPi2,
+  {$ENDIF}
+  {$IFDEF RPI3}
+  RaspberryPi3,
+  {$ENDIF}
+  {$IFDEF RPI4}
+  RaspberryPi4,
+  {$ENDIF}
   GlobalConfig,
   GlobalConst,
   GlobalTypes,
   Platform,
   Threads,
-  OpenVG,
   VC4,
   SysUtils,
   Syscalls,
@@ -23,7 +33,6 @@ uses
   Console,
   Framebuffer,
   Player,
-  VGShapes,
   dispmanx,
   UltiboUtils,  {Include Ultibo utils for some command line manipulation}
   Ultibo
@@ -35,13 +44,8 @@ var
   VideoThread: TVideoThread;
   DefFrameBuff : PFrameBufferDevice;
   Properties : TWindowProperties;
-  Width: Integer;
-  Height: Integer;
   title:string;
-  Fontsize:Integer;
-  //SpacingX, SpacingY: Integer;
 
-  //Watts, KPH, Volts, Amps :VGfloat;
 
  procedure WaitForSDDrive;
   begin
@@ -55,23 +59,14 @@ begin
 
   Console1 := ConsoleWindowCreate(ConsoleDeviceGetDefault, CONSOLE_POSITION_FULLSCREEN, True);
 
-  ConsoleWindowWriteLn(Console1, 'Audio / Video Test using OpenMax (OMX) with OpenVG overlays.');
+  ConsoleWindowWriteLn(Console1, 'Audio / Video Test using OpenMax (OMX)');
 
   DefFrameBuff := FramebufferDeviceGetDefault;
-  Width := 1680;
-  Height := 1050;
+
 
   WaitForSDDrive;
 
-  {Initialize OpenVG and the VGShapes unit}
-  vgshapessetlayer(2);
-
-  vgshapesinit(Width, Height, DISPMANX_FLAGS_ALPHA_FROM_SOURCE);
-  {Start a picture the full width and height of the screen}
-
-  VGShapesStart(Width, Height);
-  VGShapesBackgroundRGB(0,0,0, 0.0);
-  VGShapesWindowOpacity(180);
+  BCMHostInit;
 
   AudioThread := TAudioThread.Create('C:\files\skyrim.wav', True);
   VideoThread := TVideoThread.Create('C:\files\skyrim.h264', True);
@@ -79,21 +74,16 @@ begin
   // Start audio thread (Video thread starts immediately)
   AudioThread.Start;
 
-  title := 'Gereg';
-  Fontsize:=Trunc(Height * 0.05);
-  VGShapesFill(80,255,128,1);
+  title := 'Skyrim';
+
 
   while True do
 
     begin
-      //VGShapesWindowClear;
-      //VGShapesTextMid(Width * 0.5 , Height * 0.1, title,VGShapesSerifTypeface,Fontsize);
-      {End our picture and render it to the screen}
-      //VGShapesEnd;
-      sleep(5000);
+       sleep(5000);
     end;
 
-   {VGShapes calls BCMHostInit during initialization, we should also call BCMHostDeinit to cleanup}
+
   BCMHostDeinit;
 
   ConsoleWindowWriteLn(Console1, 'Halted.');
