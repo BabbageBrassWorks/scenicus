@@ -2,11 +2,8 @@ program Scenicus;
 
 {$mode objfpc}{$H+}
 
-{ Raspberry Pi Zero Application                                                }
-{  Add your program code below, add additional units to the "uses" section if  }
-{  required and create new units by selecting File, New Unit from the menu.    }
-{                                                                              }
-{  To compile your program select Run, Compile (or Run, Build) from the menu.  }
+{ Raspberry Pi AV player }
+{ Gavin McIntosh 2023 }
 
 uses
   {$IFDEF RPI}
@@ -30,11 +27,8 @@ uses
   SysUtils,
   Syscalls,
   Classes,
-  Console,
-  Framebuffer,
   Player,
   dispmanx,
-  UltiboUtils,  {Include Ultibo utils for some command line manipulation}
   Ultibo
   { Add additional units here };
 
@@ -42,8 +36,8 @@ var
   Console1: TWindowHandle;
   AudioThread: TAudioThread;
   VideoThread: TVideoThread;
-  DefFrameBuff : PFrameBufferDevice;
-  Properties : TWindowProperties;
+  //DefFrameBuff : PFrameBufferDevice;
+  //Properties : TWindowProperties;
   title:string;
 
 
@@ -57,13 +51,6 @@ begin
   { Add your program code here }
   begin
 
-  Console1 := ConsoleWindowCreate(ConsoleDeviceGetDefault, CONSOLE_POSITION_FULLSCREEN, True);
-
-  ConsoleWindowWriteLn(Console1, 'Audio / Video Test using OpenMax (OMX)');
-
-  DefFrameBuff := FramebufferDeviceGetDefault;
-
-
   WaitForSDDrive;
 
   BCMHostInit;
@@ -76,17 +63,15 @@ begin
 
   title := 'Skyrim';
 
-
   while True do
 
     begin
        sleep(5000);
     end;
 
-
   BCMHostDeinit;
 
-  ConsoleWindowWriteLn(Console1, 'Halted.');
+  //ConsoleWindowWriteLn(Console1, 'Halted.');
   ThreadHalt(0);
 
   end;
